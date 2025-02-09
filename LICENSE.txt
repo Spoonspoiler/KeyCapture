@@ -1,0 +1,17 @@
+Creative Commons Attribution-NonCommercial 4.0 International
+
+By using this software, you agree to the following terms:
+
+1️⃣ You are allowed to:
+   - Use, modify, and share this software **for personal and educational purposes**.
+   - Distribute the software **freely**, as long as you credit the original author.
+
+2️⃣ You are **NOT** allowed to:
+   - Sell, resell, or integrate this software into a commercial product **without written permission**.
+   - Use this software **for commercial purposes** without a license agreement.
+
+3️⃣ Disclaimer:
+   - This software is provided "as is", **without any warranty**.
+   - The author is **not responsible** for any damage caused by using this software.
+
+For commercial use, please contact the author at: **[Ton Email ou GitHub]**
