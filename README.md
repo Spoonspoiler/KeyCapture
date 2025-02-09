@@ -1,4 +1,4 @@
-KeyCapture 🎹
+KeyCapture
 
 Un outil simple et efficace pour afficher les touches du clavier en temps réel sous Windows.
 
@@ -21,3 +21,34 @@ Utile pour les tutoriels, le streaming et les présentations.
 ⚖️ Licence :
 - Utilisation personnelle autorisée.
 - Interdiction de revente ou d'intégration commerciale sans accord.
+
+KeyCapture
+
+A simple and efficient tool to display keyboard keystrokes in real time on Windows.
+
+📖 Description
+--------------
+KeyCapture allows you to display pressed keys in real time.  
+Useful for tutorials, streaming, and presentations.
+
+✨ Features :
+- Real-time display of pressed keys.
+- Customization: color, font, text size.
+- Adjustable opacity.
+- Discreet mode.
+
+🛠️ Installation :
+1. Clone the repository: git clone https://github.com/Spoonspoiler/KeyCapture.git
+2. Install dependencies: pip install -r requirements.txt
+3. Run the program: python main.py
+
+⚖️ License :
+- Personal use allowed.
+- Reselling or integrating into a commercial product is strictly prohibited without permission.
+
+- Developpé par Spoonspoiler
+- https://github.com/Spoonspoiler
+  
+
+
+
