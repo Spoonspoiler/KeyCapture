@@ -30,7 +30,7 @@ else:
     root.attributes("-alpha", 0.0)  # Ajuste l'opacité sous Linux/macOS (0.0 = complètement transparent, 1.0 = opaque)
 
 # Dimensions et positionnement de la fenêtre principale
-window_width, window_height = 450, 200
+window_width, window_height = 450, 100
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 x_position = 0
