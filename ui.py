@@ -7,6 +7,8 @@ import colorsys
 import keyboard_capture  # Module gérant la capture clavier
 from config import FONT_COLOR, FONT_FAMILY, FONT_SIZE, DISPLAY_DURATION, MIN_FONT_SIZE, MAX_FONT_SIZE
 from animate_dots import DotAnimator  # Module d'animation pour l'affichage principal
+import platform
+
 
 # --- Configuration de CustomTkinter ---
 ctk.set_appearance_mode("System")
@@ -20,11 +22,15 @@ root = ctk.CTk()
 root.title("Touches pressées")
 root.overrideredirect(True)
 root.attributes("-topmost", True)
-root.configure(fg_color="black")
-root.attributes("-transparentcolor", "black")
+
+
+if platform.system() == "Windows":
+    root.attributes("-transparentcolor", "black")  # Fonctionne uniquement sous Windows
+else:
+    root.attributes("-alpha", 0.0)  # Ajuste l'opacité sous Linux/macOS (0.0 = complètement transparent, 1.0 = opaque)
 
 # Dimensions et positionnement de la fenêtre principale
-window_width, window_height = 600, 500
+window_width, window_height = 450, 200
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 x_position = 0
