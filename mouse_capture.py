@@ -1,44 +1,63 @@
-# mouse_capture.py
-import time
-from pynput import mouse
+import mouse
 
-current_mouse_state = {
-    "Button.left": False,
-    "Button.middle": False,
-    "Button.right": False
-}
+capture_active = False
+click_callback = None
+scroll_callback = None  # Ajout pour gérer la molette
+release_callback = None  # Ajout du callback pour gérer les relâchements de clics
+
+def set_release_callback(callback):
+    """ Associe une fonction pour gérer le relâchement des boutons souris """
+    global release_callback
+    release_callback = callback
 
 
-mouse_movements = []
+def on_mouse_event(event):
+    """ Capture TOUS les événements de clics (sans filtrer les doubles-clics) """
 
-def on_click(x, y, button, pressed):
-    current_mouse_state[str(button)] = pressed
-    print(f"[on_click] {button} {'pressé' if pressed else 'relâché'} en ({x}, {y})", flush=True)
+    if isinstance(event, mouse.ButtonEvent):
+        print(f"[DEBUG] ButtonEvent détecté : {event}")
 
-def on_move(x, y):
-    mouse_movements.append({'x': x, 'y': y, 'timestamp': time.time()})
-    print(f"[on_move] Position: ({x}, {y})", flush=True)
+        if event.event_type == "down":  # Capture tous les clics (y compris doubles)
+            print(f"[DEBUG] Clic enfoncé : {event.button}")
+            if click_callback:
+                click_callback(event.button)
 
-def on_scroll(x, y, dx, dy):
-    print(f"[on_scroll] Position: ({x}, {y}), dx: {dx}, dy: {dy}", flush=True)
+        elif event.event_type == "up":  # Capture tous les relâchements
+            print(f"[DEBUG] Clic relâché : {event.button}")
+            if release_callback:
+                release_callback(event.button)
 
-mouse_listener = None
+    elif isinstance(event, mouse.WheelEvent):
+        print(f"[DEBUG] Scroll détecté {event.delta}")
+        if scroll_callback:
+            scroll_callback(event.delta)
+
 
 def start_mouse_listener():
-    global mouse_listener
-    if mouse_listener is None:
-        mouse_listener = mouse.Listener(
-            on_click=on_click,
-            on_move=on_move,
-            on_scroll=on_scroll,
-            daemon=True
-        )
-        mouse_listener.start()
-        print("Écouteur de souris démarré.", flush=True)
+    """ Active la capture des événements souris si ce n'est pas déjà fait """
+    global capture_active
+    if not capture_active:
+        capture_active = True
+        mouse.hook(on_mouse_event)
+        print("[INFO] Listener de souris démarré")
 
-def stop_mouse_listener():
-    global mouse_listener
-    if mouse_listener is not None:
-        mouse_listener.stop()
-        mouse_listener = None
-        print("Écouteur de souris arrêté.", flush=True)
+
+
+def stop_capture():
+    """ Désactive la capture des événements souris """
+    global capture_active
+    capture_active = False
+    mouse.unhook_all()
+    print("[INFO] Capture souris désactivée")
+
+
+def set_click_callback(callback):
+    """ Associe une fonction pour gérer les clics souris """
+    global click_callback
+    click_callback = callback
+
+
+def set_scroll_callback(callback):
+    """ Associe une fonction pour gérer le scroll """
+    global scroll_callback
+    scroll_callback = callback

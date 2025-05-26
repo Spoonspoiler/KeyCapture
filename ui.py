@@ -3,7 +3,7 @@ from tkinter import font as tkFont
 import customtkinter as ctk
 import time
 import colorsys
-# import mouse_capture  # Module gérant la capture souris (à activer si nécessaire)
+import mouse_capture  # Module gérant la capture souris (à activer si nécessaire)
 import keyboard_capture  # Module gérant la capture clavier
 from config import FONT_COLOR, FONT_FAMILY, FONT_SIZE, DISPLAY_DURATION, MIN_FONT_SIZE, MAX_FONT_SIZE
 from animate_dots import DotAnimator  # Module d'animation pour l'affichage principal
@@ -23,19 +23,18 @@ root.title("Touches pressées")
 root.overrideredirect(True)
 root.attributes("-topmost", True)
 
-
 if platform.system() == "Windows":
-    root.attributes("-transparentcolor", "black")  # Fonctionne uniquement sous Windows
+        root.attributes("-transparentcolor", "black")  # Fonctionne uniquement sous Windows
 else:
-    root.attributes("-alpha", 0.0)  # Ajuste l'opacité sous Linux/macOS (0.0 = complètement transparent, 1.0 = opaque)
+    root.attributes("-alpha", 1.0)  # Ajuste l'opacité sous Linux/macOS (0.0 = complètement transparent, 1.0 = opaque)
 
 # Dimensions et positionnement de la fenêtre principale
-window_width, window_height = 450, 100
+window_width, window_height = 600, 100
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
 x_position = 0
 y_position = screen_height - window_height
-root.geometry(f"{window_width}x{window_height}+{x_position}+{y_position}")
+
 
 # Canevas d'affichage principal
 canvas = tk.Canvas(root, width=window_width, height=window_height, bg="black", highlightthickness=0)
@@ -49,7 +48,7 @@ text_item = canvas.create_text(window_width // 2, window_height // 2,
                                font=display_font)
 
 # Animation pour l'affichage lorsque aucune saisie n'est active
-animator = DotAnimator(interval=500)
+animator = DotAnimator(interval=300)
 
 def update_canvas():
     current_time = time.time()
@@ -268,102 +267,6 @@ def quitter():
 
 btn_quit = ctk.CTkButton(settings_win, text="Quitter", command=quitter)
 btn_quit.grid(row=9, column=0, columnspan=2, padx=5, pady=5)
-
-# =============================================================================
-# Partie 3 : Fenêtre de capture souris ("ui_mouse")
-# =============================================================================
-
-# mouse_win = ctk.CTkToplevel(root)
-# root.attributes("-topmost", True)
-# mouse_win.title("Capture de souris - Joystick")
-# mouse_win.geometry("300x400")
-#
-#
-# # --- Canevas pour simuler un joystick ---
-# canvas_width_mouse = 200
-# canvas_height_mouse = 200
-# joystick_canvas = tk.Canvas(mouse_win, width=canvas_width_mouse, height=canvas_height_mouse,
-#                             bg="lightgrey", highlightthickness=0)
-# joystick_canvas.pack(pady=10)
-#
-# # Cercle extérieur (zone du joystick)
-# padding = 5
-# joystick_canvas.create_oval(padding, padding,
-#                             canvas_width_mouse - padding,
-#                             canvas_height_mouse - padding,
-#                             outline="black")
-#
-# center_x = canvas_width_mouse // 2
-# center_y = canvas_height_mouse // 2
-#
-# dot_radius = 5
-# dot = joystick_canvas.create_oval(center_x - dot_radius, center_y - dot_radius,
-#                                   center_x + dot_radius, center_y + dot_radius,
-#                                   fill="red")
-#
-# # --- Boutons indiquant l'état des clics souris ---
-# btn_frame = ctk.CTkFrame(mouse_win)
-# btn_frame.pack(pady=10)
-#
-# btn_left = ctk.CTkButton(btn_frame, text="Gauche", width=80)
-# btn_left.grid(row=0, column=0, padx=5, pady=5)
-# btn_middle = ctk.CTkButton(btn_frame, text="Centre", width=80)
-# btn_middle.grid(row=1, column=0, padx=5, pady=5)
-# btn_right = ctk.CTkButton(btn_frame, text="Droit", width=80)
-# btn_right.grid(row=2, column=0, padx=5, pady=5)
-#
-# # Variables pour le suivi du mouvement
-# initial_mouse_x = None
-# initial_mouse_y = None
-# max_disp = 100  # déplacement maximal (en pixels)
-#
-# def update_mouse_ui():
-#     global initial_mouse_x, initial_mouse_y
-#     # Mise à jour de la position du "dot" sur le joystick en fonction des mouvements
-#     if mouse_capture.mouse_movements:
-#         last_move = mouse_capture.mouse_movements[-1]
-#         current_x = last_move['x']
-#         current_y = last_move['y']
-#         if initial_mouse_x is None or initial_mouse_y is None:
-#             initial_mouse_x = current_x
-#             initial_mouse_y = current_y
-#         dx = current_x - initial_mouse_x
-#         dy = current_y - initial_mouse_y
-#         dx = max(-max_disp, min(dx, max_disp))
-#         dy = max(-max_disp, min(dy, max_disp))
-#         new_dot_x = center_x + dx
-#         new_dot_y = center_y + dy
-#         joystick_canvas.coords(dot,
-#                                new_dot_x - dot_radius, new_dot_y - dot_radius,
-#                                new_dot_x + dot_radius, new_dot_y + dot_radius)
-#     # Mise à jour de l'état des boutons en fonction de l'état actuel des clics souris
-#     state = mouse_capture.current_mouse_state  # Ce dictionnaire doit être mis à jour dans mouse_capture.py
-#     if state.get("Button.left", False):
-#         btn_left.configure(fg_color="green")
-#     else:
-#         btn_left.configure(fg_color="gray")
-#     if state.get("Button.middle", False):
-#         btn_middle.configure(fg_color="green")
-#     else:
-#         btn_middle.configure(fg_color="gray")
-#     if state.get("Button.right", False):
-#         btn_right.configure(fg_color="green")
-#     else:
-#         btn_right.configure(fg_color="gray")
-#     mouse_win.after(50, update_mouse_ui)
-#
-# # Démarrer l'écouteur de souris (assurez-vous que mouse_capture.py est correctement configuré)
-# mouse_capture.start_mouse_listener()
-# print("Listener de souris démarré depuis l'interface.")
-# btn_left = ctk.CTkButton(btn_frame, text="Gauche", width=80, hover_color="gray")
-# btn_middle = ctk.CTkButton(btn_frame, text="Centre", width=80, hover_color="gray")
-# btn_right = ctk.CTkButton(btn_frame, text="Droit", width=80, hover_color="gray")
-#
-# update_mouse_ui()
-
-# =============================================================================
-# Lancement de l'interface
-# =============================================================================
 
 def run_ui():
     root.mainloop()
